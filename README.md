@@ -1,2 +1,2 @@
 # cadastroProdutos
-API para cadastro de produtos
+CRUD com Python/Flask/SQLite
