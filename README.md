@@ -1,2 +1,1 @@
-# cadastroProdutos
-CRUD com Python/Flask/SQLite
+# python-crud
