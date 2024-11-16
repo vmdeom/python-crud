@@ -24,7 +24,7 @@ def post_produto():
 def get_produto(codigo: str):
     with Session(engine) as session:
         query = select(Produto).where(Produto.codigo == codigo)
-        produto = session.exec(produto).first()
+        produto = session.exec(query).first()
         if produto:
             return jsonify(produto.dict()), 200
         
@@ -36,22 +36,23 @@ def patch_produto(codigo: str):
         produto_data = request.json
 
         with Session(engine) as session:
-            query = select(produto).where(Produto.codigo == codigo)
-            produto.session.exec(query).first()
+            query = select(Produto).where(Produto.codigo == codigo)
+            produto = session.exec(query).first()
 
             if not produto:
                 return jsonify({"error": "Produto não encontrado"}), 404
-            
+
+            # Atualiza os campos recebidos no request
             for key, value in produto_data.items():
                 if hasattr(produto, key):
                     setattr(produto, key, value)
-            
+
             session.add(produto)
             session.commit()
             session.refresh(produto)
-        
+
         return jsonify(produto.dict()), 200
-    
+
     except Exception as e:
         return jsonify({"error": str(e)}), 400
 
@@ -60,7 +61,7 @@ def delete_produto(codigo: str):
     try:
         with Session(engine) as session:
             query = select(Produto).where(Produto.codigo == codigo)
-            prduto = session.exec(query).first()
+            produto = session.exec(query).first()
 
             if not produto:
                 return jsonify({"error": "Produto não encontrado"}), 404
